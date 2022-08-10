@@ -2,10 +2,13 @@ import { Cloudinary } from "@cloudinary/url-gen";
 import { simulateColorBlind } from "@cloudinary/url-gen/actions/effect";
 
 import { useEffect, useState } from "react";
+//import axios from "axios";
 
 const HomePage = () => {
   const [darkTheme, setDarkTheme] = useState(undefined);
   const [colorBlindEffect, setColorBlindEffect] = useState("");
+  const [altText, setAltText] = useState("");
+  const [altTextToggle, setAltTextToggle] = useState(false);
 
   const handleToggle = (event) => {
     setDarkTheme(event.target.checked);
@@ -54,6 +57,14 @@ const HomePage = () => {
   const reset = () => {
     setColorBlindEffect("");
   };
+  const toggleAlt = async () => {
+    const altT = await fetch("/api/update");
+    const alt = await altT.json();
+    console.log(alt);
+
+    setAltText(alt);
+    setAltTextToggle(!altTextToggle);
+  };
   return (
     <>
       <div className="container">
@@ -80,28 +91,14 @@ const HomePage = () => {
               <span role="img" aria-label="wave">
                 👋
               </span>{" "}
-              Hey I’m Johnpaul
+              Hey I’m John Doe
             </h1>
             <h3>
-              I am a frontend developer, writer, cowrywise brand ambassador and
-              a product student at altschool.
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit,sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam,quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat.
             </h3>
-            <p>
-              You can find me on
-              <span>
-                <a
-                  href="https://twitter.com/operascode"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Twitter
-                </a>
-              </span>
-              where I talk about design and development topics. I am glad you
-              are hear. I would love to speak and talk to new happy faces and
-              share my work process and tech talks with you.
-            </p>
-            <button className="primary-btn">Connect with me</button>
           </div>
         </section>
         <section id="image">
@@ -113,9 +110,13 @@ const HomePage = () => {
                   : "https://res.cloudinary.com/johnpaul/image/upload/v1659338247/color-effect/afro.jpg"
               }
               className="afro"
-              alt="woman afro"
+              alt={altText}
             />
+            {altTextToggle ? <i>{altText}</i> : ""}
           </div>
+          <button className="btn" onClick={toggleAlt}>
+            view alt text
+          </button>
           <div>
             <button onClick={handleClick} className="btn">
               ColorBlind Switch
